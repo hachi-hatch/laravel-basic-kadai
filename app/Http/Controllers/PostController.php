@@ -20,4 +20,25 @@ class PostController extends Controller
         $posts = Post::find($id);
         return view('posts.show', compact('posts'));
     }
+
+    public function create() {
+        return view('posts.create');
+    }
+
+    public function store(Request $request) {
+        //バリデーションを設定
+        $request->validate([
+            'title' => 'required|string|max:20',
+            'content' => 'required|string|max:200'
+        ]);
+
+        //テーブルにデータを追加
+        $post = new Post();
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+
+        //リダイレクト
+        return redirect("/posts");
+    }
 }
